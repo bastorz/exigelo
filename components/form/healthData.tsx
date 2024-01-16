@@ -97,6 +97,7 @@ const HealthData: React.FC<HealthDataProps> = ({
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("values:", values);
+    handleNextStep();
   }
 
   const isOffDaysKnown = form.watch("offDaysKnowledge");

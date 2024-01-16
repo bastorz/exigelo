@@ -29,16 +29,12 @@ interface AccidentDataProps {
 }
 
 const formSchema = z.object({
-  nameAndLastName: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+  nameAndLastName: z.string(),
+  email: z.string(),
+  phone: z.string(),
+  terms: z.boolean().refine((value) => value === true, {
+    message: "Terms must be accepted",
   }),
-  email: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  phone: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  terms: z.boolean().default(false).optional(),
 });
 
 const accidentData: React.FC<AccidentDataProps> = ({ handlePreviousStep }) => {
@@ -48,16 +44,13 @@ const accidentData: React.FC<AccidentDataProps> = ({ handlePreviousStep }) => {
       nameAndLastName: "",
       email: "",
       phone: "",
+      terms: false,
     },
   });
 
-  const onSubmit = async (
-    values: z.infer<typeof formSchema>,
-    e: React.FormEvent<HTMLInputElement>
-  ) => {
-    e.preventDefault();
+  function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("values:", values);
-  };
+  }
 
   return (
     <div className="bg-white p-10 flex flex-col space-y-4 rounded-xl">
@@ -85,7 +78,7 @@ const accidentData: React.FC<AccidentDataProps> = ({ handlePreviousStep }) => {
       <div className="flex flex-col items-start ">
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit((e) => onSubmit)}
+            onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col space-y-10 w-full items-end"
           >
             <div className="grid grid-cols-3 place-items-center w-full gap-y-10">
@@ -190,7 +183,10 @@ const accidentData: React.FC<AccidentDataProps> = ({ handlePreviousStep }) => {
               >
                 Atrás
               </Button>
-              <Button className="bg-secondary text-[18px] hover:bg-secondary/90">
+              <Button
+                type="submit"
+                className="bg-secondary text-[18px] hover:bg-secondary/90"
+              >
                 Calcular mi indemnización
                 <FaArrowRight className="ml-2" />
               </Button>
