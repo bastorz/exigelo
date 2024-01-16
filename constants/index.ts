@@ -39,3 +39,45 @@ export const vehicleDamages = [
     label: "No lo se",
   },
 ];
+
+export const booleans = [
+  {
+    value: "Si",
+    label: "Si",
+  },
+  {
+    value: "No",
+    label: "No",
+  },
+];
+
+export const injuries = [
+  {
+    value: "Daño cervical",
+    label: "Daño cervical",
+  },
+  {
+    value: "Fractura del femur",
+    label: "Fractura del femur",
+  },
+  {
+    value: "Conmoción cerebral",
+    label: "Conmoción cerebral",
+  },
+  {
+    value: "Traumatismo torácico",
+    label: "Traumatismo torácico",
+  },
+  {
+    value: "Fractura de clavícula",
+    label: "Fractura de clavícula",
+  },
+  {
+    value: "Otras lesiones",
+    label: "Otras lesiones",
+  },
+  {
+    value: "Por el momento no tengo claridad sobre las lesiones",
+    label: "Por el momento no tengo claridad sobre las lesiones",
+  },
+];

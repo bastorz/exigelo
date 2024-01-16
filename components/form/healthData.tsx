@@ -44,6 +44,8 @@ import { BiSolidUserDetail } from "react-icons/bi";
 import { HiMiniClipboardDocumentCheck } from "react-icons/hi2";
 import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
 import { RxCross1 } from "react-icons/rx";
+import { Combobox } from "../ui/combobox";
+import { booleans, injuries } from "@/constants";
 
 interface HealthDataProps {
   step: number;
@@ -55,21 +57,11 @@ interface HealthDataProps {
 type Checked = DropdownMenuCheckboxItemProps["checked"];
 
 const formSchema = z.object({
-  offDaysKnowledge: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  offDaysStartingDate: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  stillInRehabilitation: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  rehabilitationFinishDate: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  injuries: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
+  offDaysKnowledge: z.string(),
+  offDaysStartingDate: z.date(),
+  stillInRehabilitation: z.string(),
+  rehabilitationFinishDate: z.date(),
+  injuries: z.string(),
 });
 
 const HealthData: React.FC<HealthDataProps> = ({
@@ -81,27 +73,6 @@ const HealthData: React.FC<HealthDataProps> = ({
   const [stringDate, setStringDate] = React.useState<string>("");
   const [date, setDate] = React.useState<Date>();
   const [errorMessage, setErrorMessage] = React.useState<string>("");
-  const [openOffDaysKnowledge, setOpenOffDaysKnowledge] = React.useState(false);
-  const [valueOffDaysKnowledge, setValueOffDaysKnowledge] = React.useState("");
-  const [openStillInRehabilitation, setOpenStillInRehabilitation] =
-    React.useState(false);
-  const [valueStillInRehabilitation, setValueStillInRehabilitation] =
-    React.useState("");
-  const [showFirstInjurie, setShowFirstInjurie] =
-    React.useState<Checked>(false);
-  const [showSecondInjurie, setShowSecondInjurie] =
-    React.useState<Checked>(false);
-  const [showThirdInjurie, setShowThirdInjurie] =
-    React.useState<Checked>(false);
-  const [showFourthInjurie, setShowFourthInjurie] =
-    React.useState<Checked>(false);
-  const [showFifthInjurie, setShowFifthInjurie] =
-    React.useState<Checked>(false);
-  const [showSixthInjurie, setShowSixthInjurie] =
-    React.useState<Checked>(false);
-  const [showSeventhInjurie, setShowSeventhInjurie] =
-    React.useState<Checked>(false);
-
   const [selectedInjuries, setSelectedInjuries] = React.useState<string[]>([]);
 
   const handleInjurySelection = (injury: string) => {
@@ -117,62 +88,19 @@ const HealthData: React.FC<HealthDataProps> = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       offDaysKnowledge: "",
-      offDaysStartingDate: "",
+      offDaysStartingDate: new Date(),
       stillInRehabilitation: "",
-      rehabilitationFinishDate: "",
+      rehabilitationFinishDate: new Date(),
       injuries: "",
     },
   });
 
-  const onSubmit = async (
-    values: z.infer<typeof formSchema>,
-    e: React.FormEvent<HTMLInputElement>
-  ) => {
-    e.preventDefault();
+  function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("values:", values);
-  };
+  }
 
-  const yesAndNoValues = [
-    {
-      value: "si",
-      label: "si",
-    },
-    {
-      value: "no",
-      label: "no",
-    },
-  ];
-
-  const injuries = [
-    {
-      value: "Daño cervical",
-      label: "Daño cervical",
-    },
-    {
-      value: "Fractura del femur",
-      label: "Fractura del femur",
-    },
-    {
-      value: "Conmoción cerebral",
-      label: "Conmoción cerebral",
-    },
-    {
-      value: "Traumatismo torácico",
-      label: "Traumatismo torácico",
-    },
-    {
-      value: "Fractura de clavícula",
-      label: "Fractura de clavícula",
-    },
-    {
-      value: "Otras lesiones",
-      label: "Otras lesiones",
-    },
-    {
-      value: "Por el momento no tengo claridad sobre las lesiones",
-      label: "Por el momento no tengo claridad sobre las lesiones",
-    },
-  ];
+  const isOffDaysKnown = form.watch("offDaysKnowledge");
+  const isStillInRehabilitation = form.watch("stillInRehabilitation");
 
   return (
     <div className="bg-white p-10 flex flex-col space-y-4 rounded-xl">
@@ -200,71 +128,35 @@ const HealthData: React.FC<HealthDataProps> = ({
       <div className="flex flex-col items-start ">
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit((e) => onSubmit)}
+            onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col space-y-10"
           >
             <div className="grid grid-cols-3 gap-y-10">
               {/* ¿Sabes cuántos días estarás de baja? */}
-              <Popover
-                open={openOffDaysKnowledge}
-                onOpenChange={setOpenOffDaysKnowledge}
-              >
-                <div>
-                  <div className="font-medium flex items-center justify-between px-1 mb-4">
-                    ¿Sabes cuántos días estarás de baja?
-                  </div>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      aria-expanded={openOffDaysKnowledge}
-                      className="w-[280px] justify-between h-10 p-4 rounded-md border"
-                    >
-                      {valueOffDaysKnowledge
-                        ? yesAndNoValues.find(
-                            (answer) => answer.value === valueOffDaysKnowledge
-                          )?.label
-                        : "Selecciona una respuesta"}
-                      <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                    </Button>
-                  </PopoverTrigger>
-                </div>
-                <PopoverContent className="w-[280px] p-0">
-                  <Command>
-                    <CommandEmpty>
-                      No has seleccionado un tipo de accidente
-                    </CommandEmpty>
-                    <CommandGroup>
-                      {yesAndNoValues.map((answer) => (
-                        <CommandItem
-                          key={answer.value}
-                          value={answer.value}
-                          onSelect={(currentValue) => {
-                            setValueOffDaysKnowledge(
-                              currentValue === valueOffDaysKnowledge
-                                ? ""
-                                : currentValue
-                            );
-                            setOpenOffDaysKnowledge(false);
-                          }}
-                        >
-                          {answer.label}
-                          <CheckIcon
-                            className={cn(
-                              "ml-auto h-4 w-4",
-                              valueOffDaysKnowledge === answer.value
-                                ? "opacity-100"
-                                : "opacity-0"
-                            )}
+              <FormField
+                control={form.control}
+                name="offDaysKnowledge"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <div>
+                        <div className="font-medium flex items-center justify-between px-1 mb-4">
+                          ¿Sabes cuántos días estarás de baja?
+                        </div>
+                        <div className="w-[280px]">
+                          <Combobox
+                            options={booleans.map((answer) => answer)}
+                            {...field}
                           />
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </Command>
-                </PopoverContent>
-              </Popover>
+                        </div>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               {/* Seleccionar las fechas en que le han concedido la baja */}
-              {valueOffDaysKnowledge === "si" && (
+              {isOffDaysKnown === "Si" && (
                 <FormField
                   control={form.control}
                   name="offDaysStartingDate"
@@ -276,7 +168,7 @@ const HealthData: React.FC<HealthDataProps> = ({
                             Seleccionar las fechas en que le han concedido la
                             baja
                           </div>
-                          <div className="relative w-[420px]">
+                          <div className="relative w-[280px]">
                             <Input
                               className="h-10 p-4 rounded-lg border "
                               type="string"
@@ -334,68 +226,31 @@ const HealthData: React.FC<HealthDataProps> = ({
                   )}
                 />
               )}
-              <Popover
-                open={openStillInRehabilitation}
-                onOpenChange={setOpenStillInRehabilitation}
-              >
-                <div>
-                  <div className="font-medium flex items-center justify-between px-1 mb-4">
-                    ¿Aún sigues en tratamiento de rehabilitación?
-                  </div>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      aria-expanded={openStillInRehabilitation}
-                      className="w-[350px] justify-between h-10 p-4 rounded-md border"
-                    >
-                      {valueStillInRehabilitation
-                        ? yesAndNoValues.find(
-                            (answer) =>
-                              answer.value === valueStillInRehabilitation
-                          )?.label
-                        : "Selecciona una respuesta"}
-                      <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                    </Button>
-                  </PopoverTrigger>
-                </div>
-                <PopoverContent className="w-[280px] p-0">
-                  <Command>
-                    <CommandEmpty>
-                      No has seleccionado un tipo de accidente
-                    </CommandEmpty>
-                    <CommandGroup>
-                      {yesAndNoValues.map((answer) => (
-                        <CommandItem
-                          key={answer.value}
-                          value={answer.value}
-                          onSelect={(currentValue) => {
-                            setValueStillInRehabilitation(
-                              currentValue === valueStillInRehabilitation
-                                ? ""
-                                : currentValue
-                            );
-                            setOpenStillInRehabilitation(false);
-                          }}
-                        >
-                          {answer.label}
-                          <CheckIcon
-                            className={cn(
-                              "ml-auto h-4 w-4",
-                              valueStillInRehabilitation === answer.value
-                                ? "opacity-100"
-                                : "opacity-0"
-                            )}
+              <FormField
+                control={form.control}
+                name="stillInRehabilitation"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <div>
+                        <div className="font-medium flex items-center justify-between px-1 mb-4">
+                          ¿Aún sigues en tratamiento de rehabilitación?
+                        </div>
+                        <div className="w-[280px]">
+                          <Combobox
+                            options={booleans.map((answer) => answer)}
+                            {...field}
                           />
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </Command>
-                </PopoverContent>
-              </Popover>
+                        </div>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               {/* Fecha de alta de rehabilitación */}
-              {valueStillInRehabilitation === "no" && (
-                <div className="">
+              {isStillInRehabilitation === "No" && (
+                <div>
                   <FormField
                     control={form.control}
                     name="rehabilitationFinishDate"
@@ -406,7 +261,7 @@ const HealthData: React.FC<HealthDataProps> = ({
                             <div className="font-medium flex items-center justify-between px-1 mb-4">
                               Fecha de alta de rehabilitación
                             </div>
-                            <div className="relative w-[300px]">
+                            <div className="relative w-[280px]">
                               <Input
                                 className="h-10 p-4 rounded-lg border "
                                 type="string"
@@ -478,7 +333,7 @@ const HealthData: React.FC<HealthDataProps> = ({
                         <div
                           className={cn(
                             "w-[1125px]",
-                            valueOffDaysKnowledge === "si" && "w-[1150px]"
+                            isOffDaysKnown === "Si" && "w-[1150px]"
                           )}
                         >
                           <div className="font-medium flex items-center justify-between px-1 mb-4">
@@ -497,7 +352,7 @@ const HealthData: React.FC<HealthDataProps> = ({
                             <DropdownMenuContent
                               className={cn(
                                 "w-[1125px]",
-                                valueOffDaysKnowledge === "si" && "w-[1150px]"
+                                isOffDaysKnown === "Si" && "w-[1150px]"
                               )}
                             >
                               {injuries.map((injury) => (
@@ -509,6 +364,7 @@ const HealthData: React.FC<HealthDataProps> = ({
                                   onCheckedChange={() =>
                                     handleInjurySelection(injury.value)
                                   }
+                                  {...field}
                                 >
                                   {injury.label}
                                 </DropdownMenuCheckboxItem>
@@ -566,9 +422,9 @@ const HealthData: React.FC<HealthDataProps> = ({
                   Atrás
                 </Button>
                 <Button
+                  type="submit"
                   variant="outline"
                   className="bg-secondary text-white text-[18px] hover:bg-secondary/90"
-                  onClick={handleNextStep}
                 >
                   Siguiente
                   <FaArrowRight className="ml-2" />

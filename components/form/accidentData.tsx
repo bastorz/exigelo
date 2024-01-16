@@ -6,21 +6,12 @@ import * as z from "zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Combobox } from "@/components/ui/combobox";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
@@ -29,8 +20,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "../ui/button";
 import { FaArrowRight, FaCheck, FaPhone } from "react-icons/fa6";
-import React, { useEffect } from "react";
-import { CalendarIcon, CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+import React from "react";
+import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { BiSolidUserDetail } from "react-icons/bi";
