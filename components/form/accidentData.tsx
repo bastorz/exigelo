@@ -50,10 +50,6 @@ const accidentData: React.FC<AccidentDataProps> = ({
   const [stringDate, setStringDate] = React.useState<string>("");
   const [date, setDate] = React.useState<Date>();
   const [errorMessage, setErrorMessage] = React.useState<string>("");
-  const [openAccidentType, setOpenAccidentType] = React.useState(false);
-  const [valueAccidentType, setValueAccidentType] = React.useState("");
-  const [openVehicleDamage, setOpenVehicleDamage] = React.useState(false);
-  const [valueVehicleDamage, setValueVehicleDamage] = React.useState("");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

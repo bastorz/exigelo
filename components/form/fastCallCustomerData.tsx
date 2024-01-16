@@ -6,33 +6,14 @@ import * as z from "zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Combobox } from "@/components/ui/combobox";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { Button } from "../ui/button";
 import { FaArrowRight, FaCheck, FaPhone } from "react-icons/fa6";
-import React, { useEffect } from "react";
-import { CalendarIcon, CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
+import React from "react";
 import { BiSolidUserDetail } from "react-icons/bi";
 import { HiMiniClipboardDocumentCheck } from "react-icons/hi2";
 
@@ -49,14 +30,6 @@ const formSchema = z.object({
 });
 
 const FastCallCustomerData = ({}) => {
-  const [stringDate, setStringDate] = React.useState<string>("");
-  const [date, setDate] = React.useState<Date>();
-  const [errorMessage, setErrorMessage] = React.useState<string>("");
-  const [openAccidentType, setOpenAccidentType] = React.useState(false);
-  const [valueAccidentType, setValueAccidentType] = React.useState("");
-  const [openVehicleDamage, setOpenVehicleDamage] = React.useState(false);
-  const [valueVehicleDamage, setValueVehicleDamage] = React.useState("");
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -66,13 +39,9 @@ const FastCallCustomerData = ({}) => {
     },
   });
 
-  const onSubmit = async (
-    values: z.infer<typeof formSchema>,
-    e: React.FormEvent<HTMLInputElement>
-  ) => {
-    e.preventDefault();
+  function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("values:", values);
-  };
+  }
 
   return (
     <div className="bg-white p-10 flex flex-col space-y-4 rounded-xl">

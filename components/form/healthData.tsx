@@ -6,28 +6,18 @@ import * as z from "zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
+
 import {
   Popover,
   PopoverContent,
@@ -36,13 +26,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "../ui/button";
 import { FaArrowRight, FaCheck, FaPhone } from "react-icons/fa6";
-import React, { useEffect } from "react";
+import React from "react";
 import { CalendarIcon, CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { BiSolidUserDetail } from "react-icons/bi";
 import { HiMiniClipboardDocumentCheck } from "react-icons/hi2";
-import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
 import { RxCross1 } from "react-icons/rx";
 import { Combobox } from "../ui/combobox";
 import { booleans, injuries } from "@/constants";
@@ -53,8 +42,6 @@ interface HealthDataProps {
   handleNextStep: () => void;
   handleRenderUrgencyCallForm: () => void;
 }
-
-type Checked = DropdownMenuCheckboxItemProps["checked"];
 
 const formSchema = z.object({
   offDaysKnowledge: z.string(),
