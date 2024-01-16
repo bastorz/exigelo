@@ -20,7 +20,7 @@ const Hero = () => {
     accidentDate: "",
     accidentPlace: "",
   });
-  const [fastCallCustomerData, setFastCallCustomerData] = useState(false);
+  const [renderUrgencyCallForm, setRenderUrgencyCallForm] = useState(false);
 
   const handleNextStep = () => {
     setFormStep((prevStep) => prevStep + 1);
@@ -30,6 +30,10 @@ const Hero = () => {
     setFormStep((prevStep) => prevStep - 1);
   };
 
+  const handleRenderUrgencyCallForm = () => {
+    setRenderUrgencyCallForm(true);
+  };
+
   const renderNextContactForm = () => {
     switch (formStep) {
       case 1:
@@ -37,7 +41,7 @@ const Hero = () => {
           <AccidentData
             step={formStep}
             handleNextStep={handleNextStep}
-            handleFastCallCustomerDataForm={handleFastCallCustomerDataForm}
+            handleRenderUrgencyCallForm={handleRenderUrgencyCallForm}
           />
         );
       case 2:
@@ -46,6 +50,7 @@ const Hero = () => {
             step={formStep}
             handlePreviousStep={handlePreviousStep}
             handleNextStep={handleNextStep}
+            handleRenderUrgencyCallForm={handleRenderUrgencyCallForm}
           />
         );
       case 3:
@@ -60,18 +65,6 @@ const Hero = () => {
       default:
         return null;
     }
-  };
-
-  const handleFastCallCustomerDataForm = () => {
-    setFastCallCustomerData(true);
-  };
-
-  const renderFastCallCustomerData = () => {
-    if (fastCallCustomerData)
-      <FastCallCustomerData
-        handleFastCallCustomerDataForm={handleFastCallCustomerDataForm}
-      />;
-    else return null;
   };
 
   return (
@@ -102,8 +95,11 @@ const Hero = () => {
           Calculamos tu indeminización por ti
         </Button>
       </div>
-      {renderNextContactForm()}
-      {renderFastCallCustomerData()}
+      {renderUrgencyCallForm ? (
+        <FastCallCustomerData />
+      ) : (
+        renderNextContactForm()
+      )}
 
       <h2 className="text-5xl font-bold text-white max-w-[75rem] text-center leading-[66px] pt-32">
         Si lo prefieres programa tu cita con nosotros

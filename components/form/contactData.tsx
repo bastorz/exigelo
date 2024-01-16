@@ -12,29 +12,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Combobox } from "@/components/ui/combobox";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Button } from "../ui/button";
-import { FaArrowRight, FaCheck, FaPhone } from "react-icons/fa6";
-import React, { useEffect } from "react";
-import { CalendarIcon, CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
+import { FaArrowRight, FaCheck } from "react-icons/fa6";
+import React from "react";
 import { BiSolidUserDetail } from "react-icons/bi";
 import { HiMiniClipboardDocumentCheck } from "react-icons/hi2";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 interface AccidentDataProps {
   step: number;
@@ -52,21 +38,10 @@ const formSchema = z.object({
   phone: z.string().min(2, {
     message: "Username must be at least 2 characters.",
   }),
+  terms: z.boolean().default(false).optional(),
 });
 
-const accidentData: React.FC<AccidentDataProps> = ({
-  handleNextStep,
-  step,
-  handlePreviousStep,
-}) => {
-  const [stringDate, setStringDate] = React.useState<string>("");
-  const [date, setDate] = React.useState<Date>();
-  const [errorMessage, setErrorMessage] = React.useState<string>("");
-  const [openAccidentType, setOpenAccidentType] = React.useState(false);
-  const [valueAccidentType, setValueAccidentType] = React.useState("");
-  const [openVehicleDamage, setOpenVehicleDamage] = React.useState(false);
-  const [valueVehicleDamage, setValueVehicleDamage] = React.useState("");
-
+const accidentData: React.FC<AccidentDataProps> = ({ handlePreviousStep }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -180,9 +155,33 @@ const accidentData: React.FC<AccidentDataProps> = ({
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="terms"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 w-[280px]">
+                    <FormControl>
+                      <Checkbox
+                        className={cn(
+                          "border border-black rounded-sm p-2",
+                          field.value && "p-0"
+                        )}
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel>
+                        He leído y acepto el aviso legal y la política de
+                        privacidad.
+                      </FormLabel>
+                    </div>
+                  </FormItem>
+                )}
+              />
             </div>
             {/* Submit button */}
-            <div className="flex items-center gap-x-6">
+            <div className="flex items-center gap-x-6 px-8">
               <Button
                 type="submit"
                 variant="outline"

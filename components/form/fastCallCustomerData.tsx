@@ -36,10 +36,6 @@ import { cn } from "@/lib/utils";
 import { BiSolidUserDetail } from "react-icons/bi";
 import { HiMiniClipboardDocumentCheck } from "react-icons/hi2";
 
-interface fastCallCustomerDataProps {
-  handleFastCallCustomerDataForm: () => void;
-}
-
 const formSchema = z.object({
   nameAndLastName: z.string().min(2, {
     message: "Username must be at least 2 characters.",
@@ -52,9 +48,7 @@ const formSchema = z.object({
   }),
 });
 
-const FastCallCustomerData: React.FC<fastCallCustomerDataProps> = ({
-  handleFastCallCustomerDataForm,
-}) => {
+const FastCallCustomerData = ({}) => {
   const [stringDate, setStringDate] = React.useState<string>("");
   const [date, setDate] = React.useState<Date>();
   const [errorMessage, setErrorMessage] = React.useState<string>("");
@@ -178,9 +172,9 @@ const FastCallCustomerData: React.FC<fastCallCustomerDataProps> = ({
               />
             </div>
             {/* Submit button */}
-            <div className="flex items-center gap-x-6">
+            <div className="flex items-center gap-x-6 px-8">
               <Button className="bg-secondary text-[18px] hover:bg-secondary/90">
-                Calcular mi indemnización
+                Solicitar llamada
                 <FaArrowRight className="ml-2" />
               </Button>
             </div>

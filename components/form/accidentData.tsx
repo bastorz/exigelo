@@ -35,17 +35,26 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { BiSolidUserDetail } from "react-icons/bi";
 import { HiMiniClipboardDocumentCheck } from "react-icons/hi2";
+import { accidentTypes, vehicleDamages } from "@/constants";
 
 interface AccidentDataProps {
   step: number;
   handleNextStep: () => void;
-  handleFastCallCustomerDataForm: () => void;
+  handleRenderUrgencyCallForm: () => void;
 }
+
+const formSchema = z.object({
+  accidentDate: z.date(),
+  accidentPlace: z.string(),
+  bornDate: z.date(),
+  accidentType: z.string(),
+  vehicleDamage: z.string(),
+});
 
 const accidentData: React.FC<AccidentDataProps> = ({
   handleNextStep,
-  handleFastCallCustomerDataForm,
   step,
+  handleRenderUrgencyCallForm,
 }) => {
   const [stringDate, setStringDate] = React.useState<string>("");
   const [date, setDate] = React.useState<Date>();
@@ -55,53 +64,21 @@ const accidentData: React.FC<AccidentDataProps> = ({
   const [openVehicleDamage, setOpenVehicleDamage] = React.useState(false);
   const [valueVehicleDamage, setValueVehicleDamage] = React.useState("");
 
-  const form = useForm({
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
-      accidentDate: "",
+      accidentDate: new Date(),
       accidentPlace: "",
-      bornDate: "",
+      bornDate: new Date(),
       accidentType: "",
       vehicleDamage: "",
     },
   });
 
-  const onSubmit = async (
-    values: any,
-    e: React.FormEvent<HTMLInputElement>
-  ) => {
-    e.preventDefault();
+  function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("values:", values);
-  };
-
-  const accidentTypes = [
-    {
-      value: "tipo a",
-      label: "tipo a",
-    },
-    {
-      value: "tipo b",
-      label: "tipo b",
-    },
-  ];
-
-  const vehicleDamages = [
-    {
-      value: "siniestro total",
-      label: "siniestro total",
-    },
-    {
-      value: "grandes",
-      label: "grandes",
-    },
-    {
-      value: "leves",
-      label: "leves",
-    },
-    {
-      value: "no lo se",
-      label: "no lo se",
-    },
-  ];
+    handleNextStep();
+  }
 
   return (
     <div className="bg-white p-10 flex flex-col space-y-4 rounded-xl">
@@ -129,7 +106,7 @@ const accidentData: React.FC<AccidentDataProps> = ({
       <div className="flex flex-col items-start ">
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit((e) => onSubmit)}
+            onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col space-y-10 w-full items-end"
           >
             <div className="grid grid-cols-3 place-items-center w-full gap-y-10">
@@ -149,6 +126,7 @@ const accidentData: React.FC<AccidentDataProps> = ({
                             className="h-10 p-4 rounded-md border"
                             type="string"
                             placeholder="12/01/2024"
+                            {...field}
                             value={stringDate}
                             onChange={(e) => {
                               setStringDate(e.target.value);
@@ -237,6 +215,7 @@ const accidentData: React.FC<AccidentDataProps> = ({
                             className="h-10 p-4 rounded-lg border "
                             type="string"
                             placeholder="26/07/1988"
+                            {...field}
                             value={stringDate}
                             onChange={(e) => {
                               setStringDate(e.target.value);
@@ -291,7 +270,7 @@ const accidentData: React.FC<AccidentDataProps> = ({
               <div>
                 <div className="feont-medium flex items-center justify-betwen px-1 mb-4 h-7"></div>
                 <Button
-                  onClick={handleFastCallCustomerDataForm}
+                  onClick={handleRenderUrgencyCallForm}
                   variant="outline"
                   className="text-gray-500 w-[280px] py-4 border border-black/20 rounded-md hover:bg-black/5"
                 >
@@ -299,129 +278,63 @@ const accidentData: React.FC<AccidentDataProps> = ({
                 </Button>
               </div>
               {/* Tipo de accidente */}
-              <Popover
-                open={openAccidentType}
-                onOpenChange={setOpenAccidentType}
-              >
-                <div>
-                  <div className="font-medium flex items-center justify-between px-1 mb-4">
-                    Tipo de accidente
-                  </div>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      aria-expanded={openAccidentType}
-                      className="w-[280px] justify-between h-10 p-4 rounded-md border"
-                    >
-                      {valueAccidentType
-                        ? accidentTypes.find(
-                            (accidentType) =>
-                              accidentType.value === valueAccidentType
-                          )?.label
-                        : "Elige el tipo de accidente"}
-                      <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                    </Button>
-                  </PopoverTrigger>
-                </div>
-                <PopoverContent className="w-[280px] p-0">
-                  <Command>
-                    <CommandEmpty>
-                      No has seleccionado un tipo de accidente
-                    </CommandEmpty>
-                    <CommandGroup>
-                      {accidentTypes.map((accidentType) => (
-                        <CommandItem
-                          key={accidentType.value}
-                          value={accidentType.value}
-                          onSelect={(currentValue) => {
-                            setValueAccidentType(
-                              currentValue === valueAccidentType
-                                ? ""
-                                : currentValue
-                            );
-                            setOpenAccidentType(false);
-                          }}
-                        >
-                          {accidentType.label}
-                          <CheckIcon
-                            className={cn(
-                              "ml-auto h-4 w-4",
-                              valueAccidentType === accidentType.value
-                                ? "opacity-100"
-                                : "opacity-0"
+              <FormField
+                control={form.control}
+                name="accidentType"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <div>
+                        <div className="font-medium flex items-center justify-between px-1 mb-4">
+                          Tipo de accidente
+                        </div>
+                        <div className="w-[280px]">
+                          <Combobox
+                            options={accidentTypes.map(
+                              (accidentType) => accidentType
                             )}
+                            {...field}
                           />
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </Command>
-                </PopoverContent>
-              </Popover>
+                        </div>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               {/* Daño al vehículo */}
-              <Popover
-                open={openVehicleDamage}
-                onOpenChange={setOpenVehicleDamage}
-              >
-                <div>
-                  <div className="font-medium flex items-center justify-between px-1 mb-4">
-                    Daño al vehículo
-                  </div>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      aria-expanded={openVehicleDamage}
-                      className="w-[280px] justify-between h-10 p-4 rounded-md border"
-                    >
-                      {valueVehicleDamage
-                        ? vehicleDamages.find(
-                            (vehicleDamage) =>
-                              vehicleDamage.value === valueVehicleDamage
-                          )?.label
-                        : "Elige el daño al vehículo"}
-                      <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                    </Button>
-                  </PopoverTrigger>
-                </div>
-                <PopoverContent className="w-[280px] p-0">
-                  <Command>
-                    <CommandEmpty>
-                      No has seleccionado un daño del vehículo
-                    </CommandEmpty>
-                    <CommandGroup>
-                      {vehicleDamages.map((vehicleDamage) => (
-                        <CommandItem
-                          key={vehicleDamage.value}
-                          value={vehicleDamage.value}
-                          onSelect={(currentValue) => {
-                            setValueVehicleDamage(
-                              currentValue === valueVehicleDamage
-                                ? ""
-                                : currentValue
-                            );
-                            setOpenVehicleDamage(false);
-                          }}
-                        >
-                          {vehicleDamage.label}
-                          <CheckIcon
-                            className={cn(
-                              "ml-auto h-4 w-4",
-                              valueVehicleDamage === vehicleDamage.value
-                                ? "opacity-100"
-                                : "opacity-0"
+              <FormField
+                control={form.control}
+                name="vehicleDamage"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <div>
+                        <div className="font-medium flex items-center justify-between px-1 mb-4">
+                          Daños al vehículo
+                        </div>
+                        <div className="w-[280px]">
+                          <Combobox
+                            options={vehicleDamages.map(
+                              (vehicleDamage) => vehicleDamage
                             )}
+                            {...field}
                           />
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </Command>
-                </PopoverContent>
-              </Popover>
+                        </div>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {/* Tipo de accidente */}
             </div>
             {/* Submit button */}
-            <div className="flex items-center gap-x-6">
-              <Button className="bg-secondary text-[18px] hover:bg-secondary/90">
+            <div className="flex items-center gap-x-6 px-8">
+              <Button
+                onClick={handleRenderUrgencyCallForm}
+                className="bg-secondary text-[18px] hover:bg-secondary/90"
+              >
                 <FaPhone className="mr-2" />
                 Prefiero que me llamen
               </Button>
@@ -429,7 +342,6 @@ const accidentData: React.FC<AccidentDataProps> = ({
                 type="submit"
                 variant="outline"
                 className="text-gray-500 text-[18px]"
-                onClick={handleNextStep}
               >
                 Siguiente
                 <FaArrowRight className="ml-2" />

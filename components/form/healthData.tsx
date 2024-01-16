@@ -49,6 +49,7 @@ interface HealthDataProps {
   step: number;
   handlePreviousStep: () => void;
   handleNextStep: () => void;
+  handleRenderUrgencyCallForm: () => void;
 }
 
 type Checked = DropdownMenuCheckboxItemProps["checked"];
@@ -75,6 +76,7 @@ const HealthData: React.FC<HealthDataProps> = ({
   handleNextStep,
   step,
   handlePreviousStep,
+  handleRenderUrgencyCallForm,
 }) => {
   const [stringDate, setStringDate] = React.useState<string>("");
   const [date, setDate] = React.useState<Date>();
@@ -548,14 +550,14 @@ const HealthData: React.FC<HealthDataProps> = ({
               <div className="flex flex-col col-span-5">
                 <button
                   className="text-gray-500 text-[18px] flex space-x-2 items-center hover:text-black duration-300"
-                  onClick={handlePreviousStep}
+                  onClick={handleRenderUrgencyCallForm}
                 >
                   <FaPhone className="mr-2" />
                   Prefiero que me llamen
                 </button>
                 <div className="h-[2px] bg-black mt-1"></div>
               </div>
-              <div className="flex space-x-4">
+              <div className="flex space-x-4 ">
                 <Button
                   variant="outline"
                   className="text-black text-[18px]"
