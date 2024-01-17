@@ -77,14 +77,14 @@ const Footer = () => {
           href="/"
           className="text-white text-lg text-center py-10 underline cursor-default"
         >
-          <p className="cursor-pointer">Terms and Conditions</p>
+          <p className="cursor-pointer">Terminos y Condiciones</p>
         </Link>
         <p className="text-white text-lg text-center py-10">|</p>
         <Link
           href="/"
           className="text-white text-lg text-center py-10 underline cursor-default"
         >
-          <p className="cursor-pointer"> Privacy Policy</p>
+          <p className="cursor-pointer">Política de privacidad</p>
         </Link>
       </div>
     </div>

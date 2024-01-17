@@ -7,10 +7,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "./ui/button";
+import { accordionData } from "@/constants";
 
 const FAQ = () => {
-  const [isOpen, setIsOpen] = React.useState(false);
-
   return (
     <React.Fragment>
       <div className="grid grid-cols-2 py-40 px-56 gap-x-10">
@@ -26,7 +25,7 @@ const FAQ = () => {
             Calcular ahora
           </Button>
         </div>
-        <div className="flex flex-col space-y-10 py-40 px-24 border border-black/30 rounded-xl">
+        <div className="flex flex-col space-y-10 py-40 px-16 border border-black/30 rounded-xl">
           <h3 className="text-5xl font-semibold text-primary">
             ¿Tienes más preguntas? Agenda una cita gratuita
           </h3>
@@ -66,66 +65,12 @@ const FAQ = () => {
           collapsible
           className=" w-full"
         >
-          <AccordionItem value="item-1">
-            <AccordionTrigger>
-              ¿Cómo funciona la calculadora de indemnización de Exígelo
-              Abogados?
-            </AccordionTrigger>
-            <AccordionContent>
-              La calculadora opera evaluando varios factores relevantes, como
-              gastos médicos, daño a la propiedad y pérdida de ingresos, para
-              proporcionar una estimación de la posible indemnización por
-              accidente de tráfico.
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="item-2">
-            <AccordionTrigger>
-              ¿Cómo funciona la calculadora de indemnización de Exígelo
-              Abogados?
-            </AccordionTrigger>
-            <AccordionContent>
-              La calculadora opera evaluando varios factores relevantes, como
-              gastos médicos, daño a la propiedad y pérdida de ingresos, para
-              proporcionar una estimación de la posible indemnización por
-              accidente de tráfico.
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="item-3">
-            <AccordionTrigger>
-              ¿Cómo funciona la calculadora de indemnización de Exígelo
-              Abogados?
-            </AccordionTrigger>
-            <AccordionContent>
-              La calculadora opera evaluando varios factores relevantes, como
-              gastos médicos, daño a la propiedad y pérdida de ingresos, para
-              proporcionar una estimación de la posible indemnización por
-              accidente de tráfico.
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="item-4">
-            <AccordionTrigger>
-              ¿Cómo funciona la calculadora de indemnización de Exígelo
-              Abogados?
-            </AccordionTrigger>
-            <AccordionContent>
-              La calculadora opera evaluando varios factores relevantes, como
-              gastos médicos, daño a la propiedad y pérdida de ingresos, para
-              proporcionar una estimación de la posible indemnización por
-              accidente de tráfico.
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="item-5">
-            <AccordionTrigger>
-              ¿Cómo funciona la calculadora de indemnización de Exígelo
-              Abogados?
-            </AccordionTrigger>
-            <AccordionContent>
-              La calculadora opera evaluando varios factores relevantes, como
-              gastos médicos, daño a la propiedad y pérdida de ingresos, para
-              proporcionar una estimación de la posible indemnización por
-              accidente de tráfico.
-            </AccordionContent>
-          </AccordionItem>
+          {accordionData.map((acc) => (
+            <AccordionItem value={acc.id}>
+              <AccordionTrigger>{acc.title}</AccordionTrigger>
+              <AccordionContent>{acc.paragraph}</AccordionContent>
+            </AccordionItem>
+          ))}
         </Accordion>
       </div>
     </React.Fragment>

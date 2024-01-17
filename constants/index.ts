@@ -81,3 +81,30 @@ export const injuries = [
     label: "Por el momento no tengo claridad sobre las lesiones",
   },
 ];
+
+export const accordionData = [
+  {
+    title: "¿Tienes más preguntas? Agenda una cita gratuita",
+    paragraph:
+      "Si tengo mas preguntas bladasdkaoskdqok dqodk oqkd oqkdokq qkwd oq kqwdk qokw",
+    id: "item-1",
+  },
+  {
+    title: "¿Tienes más preguntas? Agenda una cita gratuita",
+    paragraph:
+      "Si tengo mas preguntas bladasdkaoskdqok dqodk oqkd oqkdokq qkwd oq kqwdk qokw",
+    id: "item-2",
+  },
+  {
+    title: "¿Tienes más preguntas? Agenda una cita gratuita",
+    paragraph:
+      "Si tengo mas preguntas bladasdkaoskdqok dqodk oqkd oqkdokq qkwd oq kqwdk qokw",
+    id: "item-3",
+  },
+  {
+    title: "¿Tienes más preguntas? Agenda una cita gratuita",
+    paragraph:
+      "Si tengo mas preguntas bladasdkaoskdqok dqodk oqkd oqkdokq qkwd oq kqwdk qokw",
+    id: "item-4",
+  },
+];

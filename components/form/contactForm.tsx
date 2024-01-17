@@ -18,24 +18,18 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Button } from "../ui/button";
-import { FaArrowRight, FaCheck, FaPhone } from "react-icons/fa6";
+import { FaArrowRight, FaPhone } from "react-icons/fa6";
 import React, { useState, useEffect } from "react";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import { BiSolidUserDetail } from "react-icons/bi";
-import { HiMiniClipboardDocumentCheck } from "react-icons/hi2";
 import { accidentTypes, booleans, injuries, vehicleDamages } from "@/constants";
-import { RxCross1 } from "react-icons/rx";
+import HealthTitle from "./formTitles/healthTitle";
+import AccidentTitle from "./formTitles/accidentTitle";
+import ContactTitle from "./formTitles/contactTItle";
 
 const formSchema = z.object({
   accidentDate: z.date(),
@@ -56,7 +50,7 @@ const formSchema = z.object({
   }),
 });
 
-const TestingForm = ({}) => {
+const ContactForm = ({}) => {
   const [stringDate, setStringDate] = useState<string>("");
   const [date, setDate] = useState<Date>();
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -89,11 +83,20 @@ const TestingForm = ({}) => {
     setFormStep((prevStep) => prevStep + 1);
   };
 
+  const handlePreviousStep = () => {
+    setFormStep((prevStep) => prevStep - 1);
+  };
+
   useEffect(() => {
     console.log("formStep", formStep);
     // Check the updated values of healthForm and contactForm after formStep changes
-    if (formStep === 2) {
+    if (formStep === 1) {
+      setHealthForm(false);
+      setContactForm(false);
+      console.log("healthForm", healthForm);
+    } else if (formStep === 2) {
       setHealthForm(true);
+      setContactForm(false);
       console.log("healthForm", healthForm);
     } else if (formStep === 3) {
       setHealthForm(false);
@@ -103,13 +106,22 @@ const TestingForm = ({}) => {
     }
   }, [formStep]);
 
-  const handlePreviousStep = () => {
-    setFormStep((prevStep) => prevStep - 1);
+  const renderFormTitle = () => {
+    switch (formStep) {
+      case 1:
+        return <AccidentTitle />;
+      case 2:
+        return <HealthTitle />;
+      case 3:
+        return <ContactTitle />;
+      // Add more cases for additional steps
+      default:
+        return null;
+    }
   };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // console.log("values:", values);
-    // handleNextStep();
+    console.log("values:", values);
     // try {
     //   const response = await fetch("/api/submitForm", {
     //     method: "POST",
@@ -137,24 +149,7 @@ const TestingForm = ({}) => {
 
   return (
     <div className="bg-white p-10 flex flex-col space-y-4 rounded-xl">
-      <h2 className="font-semibold text-3xl">TEST FORM</h2>
-      <p className="text-xl max-w-5xl">
-        Recuerda que los menores de 13 años también tienen derecho a recibir
-        indemnización, incluso si son considerados culpables.
-      </p>
-      <div className="flex items-center justify-center py-10">
-        <span className="bg-secondary rounded-full">
-          <FaCheck className="w-16 h-16 p-4" />
-        </span>
-        <div className="h-[8px] bg-secondary w-48"></div>
-        <span className="bg-slate-200 rounded-full">
-          <BiSolidUserDetail className="w-16 h-16 p-4" />
-        </span>
-        <div className="h-[8px] bg-slate-200 w-48"></div>
-        <span className="bg-slate-200 rounded-full">
-          <HiMiniClipboardDocumentCheck className="w-16 h-16 p-4" />
-        </span>
-      </div>
+      {renderFormTitle()}
 
       <div className="flex flex-col items-start ">
         <Form {...form}>
@@ -162,11 +157,12 @@ const TestingForm = ({}) => {
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col space-y-10 w-full items-end"
           >
+            {/* Accident Form */}
             <div
               className={cn(
                 "grid grid-cols-3 place-items-center w-full gap-y-10",
-                (healthForm && !contactForm) ||
-                  (healthForm && contactForm && "hidden")
+                healthForm && "hidden",
+                contactForm && "hidden"
               )}
             >
               {/* Fecha del accidente */}
@@ -388,35 +384,40 @@ const TestingForm = ({}) => {
               />
               {/* Tipo de accidente */}
             </div>
+            {/* Health Form */}
             <div
               className={cn(
                 "grid grid-cols-3 place-items-center w-full gap-y-10",
                 !healthForm && "hidden"
               )}
             >
-              {/* ¿Sabes cuántos días estarás de baja? */}
-              <FormField
-                control={form.control}
-                name="offDaysKnowledge"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <div>
-                        <div className="font-medium flex items-center justify-between px-1 mb-4">
-                          ¿Has estado de baja?
+              {/* ¿Has estado de baja? */}
+              <div
+                className={cn("col-span-1", !isOffDaysKnown && "col-span-1")}
+              >
+                <FormField
+                  control={form.control}
+                  name="offDaysKnowledge"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <div>
+                          <div className="font-medium flex items-center justify-between px-1 mb-4">
+                            ¿Has estado de baja?
+                          </div>
+                          <div className="w-[280px]">
+                            <Combobox
+                              options={booleans.map((answer) => answer)}
+                              {...field}
+                            />
+                          </div>
                         </div>
-                        <div className="w-[280px]">
-                          <Combobox
-                            options={booleans.map((answer) => answer)}
-                            {...field}
-                          />
-                        </div>
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
               {/* Seleccionar las fechas en que le han concedido la baja */}
               {isOffDaysKnown === "Si" && (
                 <FormField
@@ -431,7 +432,7 @@ const TestingForm = ({}) => {
                           </div>
                           <div className="relative w-[280px]">
                             <Input
-                              className="h-10 p-4 rounded-lg border "
+                              className="h-10 p-4 rounded-lg border w-[400px]"
                               type="string"
                               placeholder="26/07/1988"
                               value={stringDate}
@@ -456,7 +457,7 @@ const TestingForm = ({}) => {
                               <Button
                                 variant={"outline"}
                                 className={cn(
-                                  "font-normal absolute right-0 translate-y-[-50%] top-[50%] rounded-l-none h-10",
+                                  "font-normal absolute right-[-44%] translate-y-[-50%] top-[50%] rounded-l-none h-10",
                                   !date && "text-muted-foreground"
                                 )}
                               >
@@ -487,35 +488,37 @@ const TestingForm = ({}) => {
                   )}
                 />
               )}
-              <FormField
-                control={form.control}
-                name="stillInRehabilitation"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <div>
-                        <div className="font-medium flex items-center justify-between px-1 mb-4">
-                          ¿Aún sigues en tratamiento de rehabilitación?
+              {isOffDaysKnown === "Si" && (
+                <FormField
+                  control={form.control}
+                  name="stillInRehabilitation"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <div>
+                          <div className="font-medium flex items-center justify-between px-1 mb-4">
+                            ¿Aún sigues en tratamiento de rehabilitación?
+                          </div>
+                          <div className="w-[280px]">
+                            <Combobox
+                              options={booleans.map((answer) => answer)}
+                              {...field}
+                            />
+                          </div>
                         </div>
-                        <div className="w-[280px]">
-                          <Combobox
-                            options={booleans.map((answer) => answer)}
-                            {...field}
-                          />
-                        </div>
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
               {/* Fecha de alta de rehabilitación */}
               {isStillInRehabilitation === "No" && (
                 <div>
                   <FormField
                     control={form.control}
                     name="rehabilitationFinishDate"
-                    render={({ field }) => (
+                    render={() => (
                       <FormItem>
                         <FormControl>
                           <Popover>
@@ -584,84 +587,53 @@ const TestingForm = ({}) => {
                 </div>
               )}
               {/* Selecciona las lesiones por las que has recibido tratamiento */}
-              <div className="col-span-3">
-                <FormField
-                  control={form.control}
-                  name="injuries"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <div
-                          className={cn(
-                            "w-[1125px]",
-                            isOffDaysKnown === "Si" && "w-[1150px]"
-                          )}
-                        >
-                          <div className="font-medium flex items-center justify-between px-1 mb-4">
-                            Selecciona las lesiones por las que has recibido
-                            tratamiento
-                          </div>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                variant="outline"
-                                className="rounded-lg border w-full justify-start"
-                              >
-                                Selecciona las secuelas
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent
-                              className={cn(
-                                "w-[1125px]",
-                                isOffDaysKnown === "Si" && "w-[1150px]"
-                              )}
-                            >
-                              {injuries.map((injury) => (
-                                <DropdownMenuCheckboxItem
-                                  key={injury.value}
-                                  checked={selectedInjuries.includes(
-                                    injury.value
-                                  )}
-                                  onCheckedChange={() =>
-                                    handleInjurySelection(injury.value)
-                                  }
-                                  {...field}
-                                >
-                                  {injury.label}
-                                </DropdownMenuCheckboxItem>
-                              ))}
-                            </DropdownMenuContent>
-                          </DropdownMenu>
+              {/* <FormField
+                control={form.control}
+                name="injuries"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <div className={cn("")}>
+                        <div className="font-medium flex items-center justify-between px-1 mb-4">
+                          Selecciona las lesiones por las que has recibido
+                          tratamiento
                         </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <div className="flex mt-4 gap-x-4 ">
-                  {selectedInjuries.map((selectedInjury) => (
-                    <div
-                      key={selectedInjury}
-                      className="bg-slate-100 rounded-lg px-4 py-2 flex items-center justify-between"
-                    >
-                      {selectedInjury}
-                      <button
-                        className="ml-2 cursor-pointer "
-                        onClick={() =>
-                          setSelectedInjuries((prevSelected) =>
-                            prevSelected.filter(
-                              (selected) => selected !== selectedInjury
-                            )
-                          )
-                        }
-                      >
-                        <RxCross1 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant="outline"
+                              className="rounded-lg border  justify-start"
+                            >
+                              Selecciona las secuelas
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent
+                            className={cn("", isOffDaysKnown === "Si" && "")}
+                          >
+                            {injuries.map((injury) => (
+                              <DropdownMenuCheckboxItem
+                                key={injury.value}
+                                checked={selectedInjuries.includes(
+                                  injury.value
+                                )}
+                                onCheckedChange={() =>
+                                  handleInjurySelection(injury.value)
+                                }
+                                {...field}
+                              >
+                                {injury.label}
+                              </DropdownMenuCheckboxItem>
+                            ))}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              /> */}
             </div>
+            {/* Contact Form */}
             <div
               className={cn(
                 "grid grid-cols-3 place-items-center w-full gap-y-10",
@@ -763,18 +735,46 @@ const TestingForm = ({}) => {
             <div className="flex items-center gap-x-6 px-8">
               <Button
                 // onClick={handleRenderUrgencyCallForm}
-                className="bg-secondary text-[18px] hover:bg-secondary/90"
+                className={cn(
+                  "bg-secondary text-[18px] hover:bg-secondary/90",
+                  healthForm && "hidden",
+                  contactForm && "hidden"
+                )}
               >
                 <FaPhone className="mr-2" />
                 Prefiero que me llamen
               </Button>
               <Button
+                onClick={handlePreviousStep}
+                variant="outline"
+                className={cn(
+                  "text-gray-500 text-[18px]",
+                  healthForm || (!contactForm && "hidden")
+                )}
+              >
+                Atrás
+              </Button>
+              <Button
                 onClick={handleNextStep}
                 variant="outline"
-                className="text-gray-500 text-[18px]"
+                className={cn(
+                  "text-gray-500 text-[18px]",
+                  contactForm && "hidden"
+                )}
               >
                 Siguiente
                 <FaArrowRight className="ml-2" />
+              </Button>
+              <Button
+                type="submit"
+                className={cn(
+                  "bg-secondary text-[18px] hover:bg-secondary/90",
+                  healthForm && "hidden",
+                  !contactForm && "hidden"
+                )}
+              >
+                <FaPhone className="mr-2" />
+                Solicitar preuspuesto
               </Button>
             </div>
           </form>
@@ -784,4 +784,4 @@ const TestingForm = ({}) => {
   );
 };
 
-export default TestingForm;
+export default ContactForm;

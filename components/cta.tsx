@@ -20,7 +20,7 @@ const CTA: React.FC<Props> = ({
   reverse,
 }) => {
   return (
-    <div className="grid grid-cols-2 w-full place-content-end place-items-center py-28 pl-56">
+    <div className="grid grid-cols-2 w-full place-content-end place-items-center py-28 pl-56 ">
       <div
         className={cn(
           "flex flex-col space-y-8 order-0 w-full",
