@@ -88,21 +88,16 @@ const ContactForm = ({}) => {
   };
 
   useEffect(() => {
-    console.log("formStep", formStep);
     // Check the updated values of healthForm and contactForm after formStep changes
     if (formStep === 1) {
       setHealthForm(false);
       setContactForm(false);
-      console.log("healthForm", healthForm);
     } else if (formStep === 2) {
       setHealthForm(true);
       setContactForm(false);
-      console.log("healthForm", healthForm);
     } else if (formStep === 3) {
       setHealthForm(false);
       setContactForm(true);
-      console.log("healthForm", healthForm);
-      console.log("contactForm", contactForm);
     }
   }, [formStep]);
 
@@ -122,27 +117,27 @@ const ContactForm = ({}) => {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("values:", values);
-    // try {
-    //   const response = await fetch("/api/submitForm", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(values),
-    //   });
-    // } catch (error) {
-    //   console.error("Error submitting form:", error);
-    // }
+    try {
+      const response = await fetch("/api/submitForm", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   }
 
-  const handleInjurySelection = (injury: string) => {
-    // Toggle the selected injury
-    setSelectedInjuries((prevSelected) =>
-      prevSelected.includes(injury)
-        ? prevSelected.filter((selected) => selected !== injury)
-        : [...prevSelected, injury]
-    );
-  };
+  // const handleInjurySelection = (injury: string) => {
+  //   // Toggle the selected injury
+  //   setSelectedInjuries((prevSelected) =>
+  //     prevSelected.includes(injury)
+  //       ? prevSelected.filter((selected) => selected !== injury)
+  //       : [...prevSelected, injury]
+  //   );
+  // };
 
   const isOffDaysKnown = form.watch("offDaysKnowledge");
   const isStillInRehabilitation = form.watch("stillInRehabilitation");
@@ -774,7 +769,7 @@ const ContactForm = ({}) => {
                 )}
               >
                 <FaPhone className="mr-2" />
-                Solicitar preuspuesto
+                Calcular mi indemnización
               </Button>
             </div>
           </form>

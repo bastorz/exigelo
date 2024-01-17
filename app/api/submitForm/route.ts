@@ -2,18 +2,8 @@
 import { NextResponse } from "next/server";
 import { google } from "googleapis";
 
-export async function POST(req: Request) {
-  const form = {
-    accidentDate: "SAUL",
-    accidentPlace: "TEJA",
-    bornDate: "LUIS",
-    accidentType: "DANI",
-    vehicleDamage: "vehicleDamage",
-  };
-
-  const body = req.body;
-
-  console.log("body", body);
+export async function POST(request: Request) {
+  const data = await request.json();
 
   try {
     const auth = new google.auth.GoogleAuth({
@@ -35,22 +25,28 @@ export async function POST(req: Request) {
 
     const response = await sheets.spreadsheets.values.append({
       spreadsheetId: process.env.GOOGLE_SHEET_ID,
-      range: "A1:E1",
+      range: "A1:L1",
       valueInputOption: "USER_ENTERED",
       requestBody: {
         values: [
           [
-            form.accidentDate,
-            form.accidentPlace,
-            form.bornDate,
-            form.accidentType,
-            form.vehicleDamage,
+            data.accidentDate,
+            data.accidentPlace,
+            data.bornDate,
+            data.accidentType,
+            data.offDaysKnowledge,
+            data.offDaysStartingDate,
+            data.stillInRehabilitation,
+            data.rehabilitationFinishDate,
+            data.injuries,
+            data.nameAndLastName,
+            data.email,
+            data.phone,
+            data.terms,
           ],
         ],
       },
     });
-
-    console.log("response", response);
   } catch (err) {
     return NextResponse.json({ error: err }, { status: 500 });
   }
