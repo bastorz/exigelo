@@ -14,7 +14,7 @@ const Navbar = () => {
           <FaPhone className="mr-2" />
           Te llamamos
         </Button>
-        <div className="w-48 opacity-0"></div>
+        <div className="w-48"></div>
       </div>
     </nav>
   );

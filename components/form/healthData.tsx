@@ -129,7 +129,7 @@ const HealthData: React.FC<HealthDataProps> = ({
                     <FormControl>
                       <div>
                         <div className="font-medium flex items-center justify-between px-1 mb-4">
-                          ¿Sabes cuántos días estarás de baja?
+                          ¿Has estado de baja?
                         </div>
                         <div className="w-[280px]">
                           <Combobox
@@ -153,8 +153,7 @@ const HealthData: React.FC<HealthDataProps> = ({
                       <FormControl>
                         <Popover>
                           <div className="font-medium flex items-center justify-between px-1 mb-4">
-                            Seleccionar las fechas en que le han concedido la
-                            baja
+                            Seleccionar la fecha en que le han concedido la baja
                           </div>
                           <div className="relative w-[280px]">
                             <Input

@@ -8,6 +8,7 @@ import { useState } from "react";
 import HealthData from "./form/healthData";
 import ContactData from "./form/contactData";
 import FastCallCustomerData from "./form/fastCallCustomerData";
+import TestingForm from "./form/testingForm";
 
 interface FormData {
   accidentDate?: string;
@@ -34,38 +35,43 @@ const Hero = () => {
     setRenderUrgencyCallForm(true);
   };
 
-  const renderNextContactForm = () => {
-    switch (formStep) {
-      case 1:
-        return (
-          <AccidentData
-            step={formStep}
-            handleNextStep={handleNextStep}
-            handleRenderUrgencyCallForm={handleRenderUrgencyCallForm}
-          />
-        );
-      case 2:
-        return (
-          <HealthData
-            step={formStep}
-            handlePreviousStep={handlePreviousStep}
-            handleNextStep={handleNextStep}
-            handleRenderUrgencyCallForm={handleRenderUrgencyCallForm}
-          />
-        );
-      case 3:
-        return (
-          <ContactData
-            step={formStep}
-            handlePreviousStep={handlePreviousStep}
-            handleNextStep={handleNextStep}
-          />
-        );
-      // Add more cases for additional steps
-      default:
-        return null;
-    }
-  };
+  // const renderNextContactForm = () => {
+  //   switch (formStep) {
+  //     case 1:
+  //       return (
+  //         // <AccidentData
+  //         //   step={formStep}
+  //         //   handleNextStep={handleNextStep}
+  //         //   handleRenderUrgencyCallForm={handleRenderUrgencyCallForm}
+  //         // />
+  //         <TestingForm
+  //           step={formStep}
+  //           handleNextStep={handleNextStep}
+  //           handleRenderUrgencyCallForm={handleRenderUrgencyCallForm}
+  //         />
+  //       );
+  //     case 2:
+  //       return (
+  //         <HealthData
+  //           step={formStep}
+  //           handlePreviousStep={handlePreviousStep}
+  //           handleNextStep={handleNextStep}
+  //           handleRenderUrgencyCallForm={handleRenderUrgencyCallForm}
+  //         />
+  //       );
+  //     case 3:
+  //       return (
+  //         <ContactData
+  //           step={formStep}
+  //           handlePreviousStep={handlePreviousStep}
+  //           handleNextStep={handleNextStep}
+  //         />
+  //       );
+  //     // Add more cases for additional steps
+  //     default:
+  //       return null;
+  //   }
+  // };
 
   return (
     <div className="bg-primary py-32 w-full grid grid-cols-1 place-items-center space-y-20">
@@ -95,11 +101,12 @@ const Hero = () => {
           Calculamos tu indeminización por ti
         </Button>
       </div>
-      {renderUrgencyCallForm ? (
+      <TestingForm />
+      {/* {renderUrgencyCallForm ? (
         <FastCallCustomerData />
       ) : (
         renderNextContactForm()
-      )}
+      )} */}
 
       <h2 className="text-5xl font-bold text-white max-w-[75rem] text-center leading-[66px] pt-32">
         Si lo prefieres programa tu cita con nosotros

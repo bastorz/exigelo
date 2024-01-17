@@ -62,9 +62,20 @@ const accidentData: React.FC<AccidentDataProps> = ({
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("values:", values);
     handleNextStep();
+    // try {
+    //   const response = await fetch("/api/submitForm", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(values),
+    //   });
+    // } catch (error) {
+    //   console.error("Error submitting form:", error);
+    // }
   }
 
   return (
