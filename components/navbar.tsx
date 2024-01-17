@@ -3,10 +3,18 @@ import { FaPhone } from "react-icons/fa6";
 import { Button } from "./ui/button";
 
 const Navbar = () => {
+  const moneyBag = "\u{1F4B0}";
+
   return (
-    <nav className="h-32 bg-primary pt-10 sticky top-0 z-50">
-      <div className="grid grid-cols-2 place-content-center place-items-start px-40">
-        <Image src="/logo.png" alt="" width={100} height={100} />
+    <nav className="h-36 bg-primary pt-10">
+      <div className="grid grid-cols-2 px-40">
+        <Image
+          src="/logo.png"
+          alt=""
+          width={100}
+          height={100}
+          className="pt-3"
+        />
         <div className="flex space-x-4 w-full items-center justify-end">
           <Button
             variant="outline"
@@ -15,7 +23,14 @@ const Navbar = () => {
             <FaPhone className="mr-2" />
             Te llamamos
           </Button>
-          <div className="w-48"></div>
+          <Button className=" bg-red-500/80 h-14 w-80 pl-20 relative">
+            <div className="absolute bg-red-300 h-14 w-20 flex items-center justify-center left-0 shape pr-5 text-[26px] rounded-l-xl">
+              {moneyBag}
+            </div>
+            <p className="text-[16px] font-semibold">
+              Acabo de tener un accidente
+            </p>
+          </Button>
         </div>
       </div>
     </nav>
