@@ -30,6 +30,7 @@ import { accidentTypes, booleans, injuries, vehicleDamages } from "@/constants";
 import HealthTitle from "./formTitles/healthTitle";
 import AccidentTitle from "./formTitles/accidentTitle";
 import ContactTitle from "./formTitles/contactTItle";
+import MultiSelect from "../ui/multiselect";
 
 const formSchema = z.object({
   accidentDate: z.date(),
@@ -582,51 +583,25 @@ const ContactForm = ({}) => {
                 </div>
               )}
               {/* Selecciona las lesiones por las que has recibido tratamiento */}
-              {/* <FormField
+              <FormField
                 control={form.control}
                 name="injuries"
                 render={({ field }) => (
                   <FormItem>
-                    <FormControl>
-                      <div className={cn("")}>
-                        <div className="font-medium flex items-center justify-between px-1 mb-4">
-                          Selecciona las lesiones por las que has recibido
-                          tratamiento
-                        </div>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button
-                              variant="outline"
-                              className="rounded-lg border  justify-start"
-                            >
-                              Selecciona las secuelas
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent
-                            className={cn("", isOffDaysKnown === "Si" && "")}
-                          >
-                            {injuries.map((injury) => (
-                              <DropdownMenuCheckboxItem
-                                key={injury.value}
-                                checked={selectedInjuries.includes(
-                                  injury.value
-                                )}
-                                onCheckedChange={() =>
-                                  handleInjurySelection(injury.value)
-                                }
-                                {...field}
-                              >
-                                {injury.label}
-                              </DropdownMenuCheckboxItem>
-                            ))}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-                    </FormControl>
+                    <FormLabel>
+                      Selecciona las lesiones por las que has recibido
+                      tratamiento
+                    </FormLabel>
+                    <MultiSelect
+                      selected={[field.value]}
+                      options={injuries.map((injury) => injury)}
+                      {...field}
+                      className="sm:w-[510px]"
+                    />
                     <FormMessage />
                   </FormItem>
                 )}
-              /> */}
+              />
             </div>
             {/* Contact Form */}
             <div

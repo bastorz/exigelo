@@ -23,9 +23,14 @@ const Navbar = () => {
             <FaPhone className="mr-2" />
             Te llamamos
           </Button>
-          <Button className=" bg-red-500/80 h-14 w-80 pl-20 relative">
-            <div className="absolute bg-red-300 h-14 w-20 flex items-center justify-center left-0 shape pr-5 text-[26px] rounded-l-xl">
-              {moneyBag}
+          <Button className="bg-[#CA3C3C] h-14 w-80 pl-20 relative">
+            <div className="absolute bg-[#FFD8CF] h-14 w-20 flex items-center justify-center left-0 shape pr-5 text-[26px] rounded-l-xl">
+              <Image
+                src="/moneybag.png"
+                alt="money bag emoji"
+                width={45}
+                height={45}
+              />
             </div>
             <p className="text-[16px] font-semibold">
               Acabo de tener un accidente
