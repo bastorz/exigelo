@@ -28,8 +28,8 @@ const Navbar = () => {
               <Image
                 src="/moneybag.png"
                 alt="money bag emoji"
-                width={45}
-                height={45}
+                width={40}
+                height={40}
               />
             </div>
             <p className="text-[16px] font-semibold">

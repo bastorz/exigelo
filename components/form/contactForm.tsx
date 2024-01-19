@@ -26,7 +26,14 @@ import React, { useState, useEffect } from "react";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import { accidentTypes, booleans, injuries, vehicleDamages } from "@/constants";
+import {
+  accidentTypes,
+  booleans,
+  days,
+  injuries,
+  numbers,
+  vehicleDamages,
+} from "@/constants";
 import HealthTitle from "./formTitles/healthTitle";
 import AccidentTitle from "./formTitles/accidentTitle";
 import ContactTitle from "./formTitles/contactTItle";
@@ -42,7 +49,11 @@ const formSchema = z.object({
   offDaysStartingDate: z.date(),
   stillInRehabilitation: z.string(),
   rehabilitationFinishDate: z.date(),
-  injuries: z.string(),
+  injuries: z.array(z.string()),
+  isHospitalized: z.string(),
+  hospitalizedDays: z.string(),
+  isSurgicalInterventioned: z.string(),
+  surgeryReceived: z.string(),
   nameAndLastName: z.string(),
   email: z.string(),
   phone: z.string(),
@@ -71,8 +82,10 @@ const ContactForm = ({}) => {
       offDaysKnowledge: "",
       offDaysStartingDate: new Date(),
       stillInRehabilitation: "",
+      isSurgicalInterventioned: "",
+      surgeryReceived: "",
       rehabilitationFinishDate: new Date(),
-      injuries: "",
+      injuries: [],
       nameAndLastName: "",
       email: "",
       phone: "",
@@ -118,48 +131,30 @@ const ContactForm = ({}) => {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("values:", values);
-    try {
-      const response = await fetch("/api/submitForm", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
-    } catch (error) {
-      console.error("Error submitting form:", error);
-    }
+    // try {
+    //   const response = await fetch("/api/submitForm", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(values),
+    //   });
+    // } catch (error) {
+    //   console.error("Error submitting form:", error);
+    // }
   }
-
-  // const handleInjurySelection = (injury: string) => {
-  //   // Toggle the selected injury
-  //   setSelectedInjuries((prevSelected) =>
-  //     prevSelected.includes(injury)
-  //       ? prevSelected.filter((selected) => selected !== injury)
-  //       : [...prevSelected, injury]
-  //   );
-  // };
-
-  const handleInjurySelection = (injury: string) => {
-    // Toggle the selected injury
-    setSelectedInjuries((prevSelected) =>
-      prevSelected.includes(injury)
-        ? prevSelected.filter((selected) => selected !== injury)
-        : [...prevSelected, injury]
-    );
-  };
 
   const isOffDaysKnown = form.watch("offDaysKnowledge");
   const isStillInRehabilitation = form.watch("stillInRehabilitation");
+  const isHospitalized = form.watch("isHospitalized");
+  const isSurgicalInterventioned = form.watch("isSurgicalInterventioned");
   const isInjuries = form.watch("injuries");
-
-  console.log("injhuries", isInjuries);
 
   return (
     <div className="bg-white p-10 flex flex-col space-y-4 rounded-xl">
       {renderFormTitle()}
 
-      <div className="flex flex-col items-start ">
+      <div className="flex flex-col items-start px-20 w-[1500px]">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -168,7 +163,7 @@ const ContactForm = ({}) => {
             {/* Accident Form */}
             <div
               className={cn(
-                "grid grid-cols-3 place-items-center w-full gap-y-10",
+                "grid grid-cols-3 place-items-center w-full gap-y-10 ",
                 healthForm && "hidden",
                 contactForm && "hidden"
               )}
@@ -395,37 +390,33 @@ const ContactForm = ({}) => {
             {/* Health Form */}
             <div
               className={cn(
-                "grid grid-cols-3 place-items-center w-full gap-y-10",
+                "grid grid-cols-3 gap-y-10 w-full place-content-center",
                 !healthForm && "hidden"
               )}
             >
               {/* ¿Has estado de baja? */}
-              <div
-                className={cn("col-span-1", !isOffDaysKnown && "col-span-1")}
-              >
-                <FormField
-                  control={form.control}
-                  name="offDaysKnowledge"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <div>
-                          <div className="font-medium flex items-center justify-between px-1 mb-4">
-                            ¿Has estado de baja?
-                          </div>
-                          <div className="w-[280px]">
-                            <Combobox
-                              options={booleans.map((answer) => answer)}
-                              {...field}
-                            />
-                          </div>
+              <FormField
+                control={form.control}
+                name="offDaysKnowledge"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <div>
+                        <div className="font-medium flex items-center justify-between px-1 mb-4">
+                          ¿Has estado de baja?
                         </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+                        <div className="w-[280px]">
+                          <Combobox
+                            options={booleans.map((answer) => answer)}
+                            {...field}
+                          />
+                        </div>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               {/* Seleccionar las fechas en que le han concedido la baja */}
               {isOffDaysKnown === "Si" && (
                 <FormField
@@ -440,7 +431,7 @@ const ContactForm = ({}) => {
                           </div>
                           <div className="relative w-[280px]">
                             <Input
-                              className="h-10 p-4 rounded-lg border w-[400px]"
+                              className="h-10 p-4 rounded-lg border"
                               type="string"
                               placeholder="26/07/1988"
                               value={stringDate}
@@ -465,7 +456,7 @@ const ContactForm = ({}) => {
                               <Button
                                 variant={"outline"}
                                 className={cn(
-                                  "font-normal absolute right-[-44%] translate-y-[-50%] top-[50%] rounded-l-none h-10",
+                                  "font-normal absolute right-0 translate-y-[-50%] top-[50%] rounded-l-none h-10",
                                   !date && "text-muted-foreground"
                                 )}
                               >
@@ -496,6 +487,7 @@ const ContactForm = ({}) => {
                   )}
                 />
               )}
+              {/* ¿Aún sigues en tratamiento de rehabilitación? */}
               {isOffDaysKnown === "Si" && (
                 <FormField
                   control={form.control}
@@ -594,26 +586,138 @@ const ContactForm = ({}) => {
                   />
                 </div>
               )}
+              {/* ¿Has estado hospitalizado? */}
+              {isOffDaysKnown === "Si" && (
+                <FormField
+                  control={form.control}
+                  name="isHospitalized"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <div>
+                          <div className="font-medium flex items-center justify-between px-1 mb-4">
+                            ¿Has estado hospitalizado?
+                          </div>
+                          <div className="w-[280px]">
+                            <Combobox
+                              options={booleans.map((answer) => answer)}
+                              {...field}
+                            />
+                          </div>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+              {/* ¿Cuántos dias has estado hospitalizado? */}
+              {isOffDaysKnown === "Si" && isHospitalized === "Si" && (
+                <FormField
+                  control={form.control}
+                  name="hospitalizedDays"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <div>
+                          <div className="font-medium flex items-center justify-between px-1 mb-4">
+                            ¿Cuántos dias has estado hospitalizado?
+                          </div>
+                          <div className="w-[280px]">
+                            <Combobox
+                              options={days.map((answer) => answer)}
+                              {...field}
+                            />
+                          </div>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+              {/* ¿Has recibido intervención quirúrjica? */}
+              {isOffDaysKnown === "Si" && (
+                <FormField
+                  control={form.control}
+                  name="isSurgicalInterventioned"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <div>
+                          <div className="font-medium flex items-center justify-between px-1 mb-4">
+                            ¿Has recibido intervención quirúrjica?
+                          </div>
+                          <div className="w-[280px]">
+                            <Combobox
+                              options={booleans.map((answer) => answer)}
+                              {...field}
+                            />
+                          </div>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+              {/* ¿Cuántas intervenciones has recibido? */}
+              {isOffDaysKnown === "Si" && isSurgicalInterventioned === "Si" && (
+                <FormField
+                  control={form.control}
+                  name="surgeryReceived"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <div>
+                          <div className="font-medium flex items-center justify-between px-1 mb-4">
+                            ¿Cuántas intervenciones has recibido?
+                          </div>
+                          <div className="w-[280px]">
+                            <Combobox
+                              options={numbers.map((answer) => answer)}
+                              {...field}
+                            />
+                          </div>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
               {/* Selecciona las lesiones por las que has recibido tratamiento */}
-              <FormField
-                control={form.control}
-                name="injuries"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="font-medium flex items-center justify-between px-1 mb-4">
-                      Selecciona las lesiones por las que has recibido
-                      tratamiento
-                    </div>
-                    <MultiSelect
-                      selected={[field.value]}
-                      options={injuries.map((injury) => injury)}
-                      {...field}
-                      className="sm:w-[510px]"
-                    />
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {isOffDaysKnown === "Si" && (
+                <div className="col-span-3">
+                  <FormField
+                    control={form.control}
+                    name="injuries"
+                    render={({ field }) => (
+                      <FormItem>
+                        <div className="font-medium flex flex-col items-start">
+                          <p>
+                            Selecciona las lesiones por las que has recibido
+                            tratamiento
+                          </p>
+                        </div>
+                        <MultiSelect
+                          selected={field.value}
+                          options={injuries.map((injury) => injury)}
+                          {...field}
+                        />
+                        <div className="flex space-x-2 items-center">
+                          <span className="text-red-500">*</span>
+                          <p className="text-[11px]">
+                            Si no encuentra una lesión que se adecúe a su caso,
+                            llame directamente
+                          </p>
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              )}
             </div>
             {/* Contact Form */}
             <div

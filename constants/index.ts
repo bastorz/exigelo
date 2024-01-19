@@ -51,6 +51,64 @@ export const booleans = [
   },
 ];
 
+export const days = [
+  {
+    value: "1 día",
+    label: "1 día",
+  },
+  {
+    value: "2",
+    label: "2 días",
+  },
+  {
+    value: "3",
+    label: "3 días",
+  },
+  {
+    value: "4",
+    label: "4 días",
+  },
+  {
+    value: "5",
+    label: "5 días",
+  },
+  {
+    value: "6",
+    label: "6 días",
+  },
+  {
+    value: "7",
+    label: "7 días",
+  },
+  {
+    value: "<7",
+    label: "Más de 7 días",
+  },
+];
+
+export const numbers = [
+  {
+    value: "1",
+    label: "1",
+  },
+  {
+    value: "2",
+    label: "2",
+  },
+  {
+    value: "3",
+    label: "3",
+  },
+  {
+    value: "4",
+    label: "4",
+  },
+  {
+    value: "5",
+    label: "5",
+  },
+];
+
 export const injuries = [
   {
     value: "Daño cervical",
