@@ -140,8 +140,20 @@ const ContactForm = ({}) => {
   //   );
   // };
 
+  const handleInjurySelection = (injury: string) => {
+    // Toggle the selected injury
+    setSelectedInjuries((prevSelected) =>
+      prevSelected.includes(injury)
+        ? prevSelected.filter((selected) => selected !== injury)
+        : [...prevSelected, injury]
+    );
+  };
+
   const isOffDaysKnown = form.watch("offDaysKnowledge");
   const isStillInRehabilitation = form.watch("stillInRehabilitation");
+  const isInjuries = form.watch("injuries");
+
+  console.log("injhuries", isInjuries);
 
   return (
     <div className="bg-white p-10 flex flex-col space-y-4 rounded-xl">
@@ -588,10 +600,10 @@ const ContactForm = ({}) => {
                 name="injuries"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
+                    <div className="font-medium flex items-center justify-between px-1 mb-4">
                       Selecciona las lesiones por las que has recibido
                       tratamiento
-                    </FormLabel>
+                    </div>
                     <MultiSelect
                       selected={[field.value]}
                       options={injuries.map((injury) => injury)}

@@ -18,6 +18,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Badge } from "@/components/ui/badge";
+import { injuries } from "@/constants";
 
 export type OptionType = {
   label: string;
@@ -41,14 +42,13 @@ function MultiSelect({
   const [open, setOpen] = React.useState(false);
 
   const handleUnselect = (item: string) => {
-    const updatedSelected = selected.filter((i) => i !== item);
+    const updatedSelected = selected
+      .reduce((acc, val: any) => acc.concat(val), [])
+      .filter((i) => i !== item);
     onChange(updatedSelected);
   };
 
-  const asda = selected;
-
-  console.log("asda", asda);
-
+  console.log("selected", selected);
   return (
     <>
       <Popover open={open} onOpenChange={setOpen} {...props}>
@@ -66,47 +66,48 @@ function MultiSelect({
             <HiChevronUpDown className="h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-full p-0">
+        <PopoverContent className="w-full">
           <Command className={className}>
-            <CommandEmpty>No item found.</CommandEmpty>
             <CommandGroup className="max-h-64 overflow-auto">
-              {options.map((option) => (
+              {injuries.map((injury) => (
                 <CommandItem
-                  key={option.value}
+                  key={injury.value}
                   onSelect={() => {
-                    const updatedSelected = selected.includes(option.value)
-                      ? selected.filter((item) => item !== option.value)
-                      : [...selected, option.value];
-                    onChange(updatedSelected);
+                    onChange(
+                      selected.includes(injury.value)
+                        ? selected.filter((item) => item !== injury.value)
+                        : [...selected, injury.value]
+                    );
+                    setOpen(true);
                   }}
                 >
                   <FaCheck
                     className={cn(
                       "mr-2 h-4 w-4",
-                      selected.includes(option.value)
+                      selected.includes(injury.value)
                         ? "opacity-100"
                         : "opacity-0"
                     )}
                   />
-                  {option.label}
+                  {injury.label}
                 </CommandItem>
               ))}
             </CommandGroup>
           </Command>
         </PopoverContent>
       </Popover>
-      {selected.map((item) => item.length > 0) && (
-        <div className="flex flex-wrap gap-1">
-          {selected.map((item) => (
+      <div className="flex w-full items-center justify-center space-x-4">
+        {selected.length > 0 &&
+          selected.map((item) => (
             <Badge
               variant="secondary"
               key={item}
-              className="mr-1 mb-1"
+              className="mr-1 mb-1 bg-gray-100 rounded-lg w-full flex items-center justify-center p-3"
               onClick={() => handleUnselect(item)}
             >
               {item}
               <button
-                className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 "
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     handleUnselect(item);
@@ -122,8 +123,7 @@ function MultiSelect({
               </button>
             </Badge>
           ))}
-        </div>
-      )}
+      </div>
     </>
   );
 }
