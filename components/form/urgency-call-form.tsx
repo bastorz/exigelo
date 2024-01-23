@@ -16,6 +16,16 @@ import { FaArrowRight, FaCheck, FaPhone } from "react-icons/fa6";
 import React from "react";
 import { BiSolidUserDetail } from "react-icons/bi";
 import { HiMiniClipboardDocumentCheck } from "react-icons/hi2";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import Image from "next/image";
 
 const formSchema = z.object({
   nameAndLastName: z.string().min(2, {
@@ -29,7 +39,7 @@ const formSchema = z.object({
   }),
 });
 
-const FastCallCustomerData = ({}) => {
+const UrgencyCallForm = ({}) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -69,7 +79,7 @@ const FastCallCustomerData = ({}) => {
       <div className="flex flex-col items-start ">
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit((e) => onSubmit)}
+            onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col space-y-10 w-full items-end"
           >
             <div className="grid grid-cols-3 place-items-center w-full gap-y-10">
@@ -142,10 +152,43 @@ const FastCallCustomerData = ({}) => {
             </div>
             {/* Submit button */}
             <div className="flex items-center gap-x-6 px-8">
-              <Button className="bg-secondary text-[18px] hover:bg-secondary/90">
-                Solicitar llamada
-                <FaArrowRight className="ml-2" />
-              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button
+                    type="submit"
+                    variant="default"
+                    className="bg-secondary text-white font-semibold text-[18px]"
+                  >
+                    Solicitar llamada
+                    <FaArrowRight className="ml-2" />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px] flex flex-col items-center">
+                  <DialogHeader className="flex items-center">
+                    <DialogTitle>
+                      <Image
+                        src="/man-judge.png"
+                        alt={""}
+                        width={70}
+                        height={70}
+                      />
+                    </DialogTitle>
+                    <DialogDescription className="py-4 font-bold text-black text-[22px] text-center">
+                      Hemos recibido tus datos. Mientras tanto, puedes ponerte
+                      en contacto con nosotros si así lo prefieres.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <div className="flex flex-col items-center">
+                      <Button className="w-[350px] bg-secondary text-[18px] rounded-md py-8">
+                        Whatsapp
+                        <FaArrowRight className="ml-2" />
+                      </Button>
+                      <p className="font-bold text-[22px] pt-8">Exígelo</p>
+                    </div>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </div>
           </form>
         </Form>
@@ -154,4 +197,4 @@ const FastCallCustomerData = ({}) => {
   );
 };
 
-export default FastCallCustomerData;
+export default UrgencyCallForm;

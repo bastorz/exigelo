@@ -4,7 +4,7 @@ import { HiMiniClipboardDocumentCheck } from "react-icons/hi2";
 
 const AccidentTitle = () => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col p-4">
       <h2 className="font-semibold text-3xl">
         Ingresa los datos del accidente
       </h2>

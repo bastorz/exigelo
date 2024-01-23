@@ -3,13 +3,8 @@
 import { IoMdArrowDown } from "react-icons/io";
 import Image from "next/image";
 import { Button } from "./ui/button";
-import { useState } from "react";
-import ContactForm from "./form/contactForm";
-
-interface FormData {
-  accidentDate?: string;
-  accidentPlace?: string;
-}
+import ContactForm from "./form/contact-form";
+import EstimationCalculator from "./estimation-calculator";
 
 const Hero = () => {
   return (

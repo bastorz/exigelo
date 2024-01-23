@@ -66,7 +66,7 @@ const FAQ = () => {
           className=" w-full"
         >
           {accordionData.map((acc) => (
-            <AccordionItem value={acc.id}>
+            <AccordionItem value={acc.id} key={acc.id}>
               <AccordionTrigger>{acc.title}</AccordionTrigger>
               <AccordionContent>{acc.paragraph}</AccordionContent>
             </AccordionItem>

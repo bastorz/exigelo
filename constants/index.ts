@@ -142,27 +142,58 @@ export const injuries = [
 
 export const accordionData = [
   {
-    title: "¿Tienes más preguntas? Agenda una cita gratuita",
+    title:
+      "¿Cómo funciona la calculadora de indemnización de Exígelo Abogados?",
     paragraph:
-      "Si tengo mas preguntas bladasdkaoskdqok dqodk oqkd oqkdokq qkwd oq kqwdk qokw",
+      "La calculadora opera evaluando varios factores relevantes, como gastos médicos, daño a la propiedad y pérdida de ingresos, para proporcionar una estimación de la posible indemnización por accidente de tráfico.",
     id: "item-1",
   },
   {
-    title: "¿Tienes más preguntas? Agenda una cita gratuita",
+    title:
+      "¿Cuáles son los factores que la calculadora tiene en cuenta al calcular la indemnización?",
     paragraph:
       "Si tengo mas preguntas bladasdkaoskdqok dqodk oqkd oqkdokq qkwd oq kqwdk qokw",
     id: "item-2",
   },
   {
-    title: "¿Tienes más preguntas? Agenda una cita gratuita",
+    title:
+      "¿Es necesario proporcionar información personal para utilizar la calculadora?",
     paragraph:
       "Si tengo mas preguntas bladasdkaoskdqok dqodk oqkd oqkdokq qkwd oq kqwdk qokw",
     id: "item-3",
   },
   {
-    title: "¿Tienes más preguntas? Agenda una cita gratuita",
+    title:
+      "¿Los resultados de la calculadora son garantía de la indemnización real que recibiré?",
     paragraph:
       "Si tengo mas preguntas bladasdkaoskdqok dqodk oqkd oqkdokq qkwd oq kqwdk qokw",
     id: "item-4",
+  },
+  {
+    title: "¿Cuánto tiempo lleva completar la calculadora?",
+    paragraph:
+      "Si tengo mas preguntas bladasdkaoskdqok dqodk oqkd oqkdokq qkwd oq kqwdk qokw",
+    id: "item-5",
+  },
+  {
+    title:
+      "¿La calculadora es aplicable a todos los tipos de accidentes de tráfico?",
+    paragraph:
+      "Si tengo mas preguntas bladasdkaoskdqok dqodk oqkd oqkdokq qkwd oq kqwdk qokw",
+    id: "item-6",
+  },
+  {
+    title:
+      "¿Puedo confiar plenamente en los resultados de la calculadora al tomar decisiones legales?",
+    paragraph:
+      "Si tengo mas preguntas bladasdkaoskdqok dqodk oqkd oqkdokq qkwd oq kqwdk qokw",
+    id: "item-7",
+  },
+  {
+    title:
+      "¿Cómo puedo utilizar los resultados de la calculadora en una consulta legal?",
+    paragraph:
+      "Si tengo mas preguntas bladasdkaoskdqok dqodk oqkd oqkdokq qkwd oq kqwdk qokw",
+    id: "item-8",
   },
 ];

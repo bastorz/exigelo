@@ -4,7 +4,7 @@ import { HiMiniClipboardDocumentCheck } from "react-icons/hi2";
 
 const ContactTitle = () => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col p-4">
       <h2 className="font-semibold text-3xl">
         Último paso: ¡tus datos de contacto!
       </h2>
