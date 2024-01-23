@@ -161,7 +161,10 @@ const ContactForm = ({}) => {
         <div className="bg-white p-10 flex flex-col space-y-4 rounded-xl ">
           {renderFormTitle()}
 
-          <div className="flex flex-col items-start w-[1500px]">
+          <div
+            className="flex flex-col items-start w-[1500px]"
+            id="contactForm"
+          >
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
